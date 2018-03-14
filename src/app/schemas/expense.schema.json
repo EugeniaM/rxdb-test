@@ -1,0 +1,25 @@
+{
+  "title": "expense schema",
+  "description": "describes an expense",
+  "version": 0,
+  "disableKeyCompression": true,
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "default": ""
+    },
+    "type": {
+      "type": "string",
+      "default": ""
+    },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    }
+  }
+}
