@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as RxDB from 'rxdb';
 import { QueryChangeDetector, RxDatabase} from "rxdb";
 
-import { configRxdbLocationPlugin } from "../plugins/rxdb-location.plugin";
+import { configRxdbLocationPlugin } from "../rxdb-plugins/rxdb-location.plugin";
 
 QueryChangeDetector.enable();
 QueryChangeDetector.enableDebugging();
