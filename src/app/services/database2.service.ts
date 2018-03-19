@@ -3,8 +3,12 @@ import { Injectable } from '@angular/core';
 import * as RxDB from 'rxdb';
 import { QueryChangeDetector, RxDatabase} from "rxdb";
 
+import { configRxdbLocationPlugin } from "../plugins/rxdb-location.plugin";
+
 QueryChangeDetector.enable();
 QueryChangeDetector.enableDebugging();
+
+const locationPlugin = configRxdbLocationPlugin({ location: 'default' });
 
 // const adapters = {
 //   websql: require('pouchdb-adapter-websql'),
@@ -15,9 +19,6 @@ QueryChangeDetector.enableDebugging();
 // RxDB.plugin(adapters[useAdapter]);
 
 const useAdapter = 'cordova-sqlite';
-RxDB.plugin(require('pouchdb-adapter-cordova-sqlite'));
-
-RxDB.plugin(require('pouchdb-adapter-http'));
 
 let collections = [
   {
@@ -30,13 +31,14 @@ let collections = [
 export class DatabaseService {
   static dbPromise: Promise<RxDatabase> = null;
   private async _create(): Promise<RxDatabase> {
+    RxDB.plugin(require('pouchdb-adapter-cordova-sqlite'));
+    RxDB.plugin(locationPlugin);
 
     console.log('DatabaseService: creating database..');
     const db: RxDatabase = await RxDB.create({
       name: 'newionic',
       adapter: useAdapter,
-      password: 'myLongAndStupidPassword',
-      options: { location: 'default' }
+      password: 'myLongAndStupidPassword'
     });
     console.log('DatabaseService: created database');
 

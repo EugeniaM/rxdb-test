@@ -31,12 +31,18 @@
         <button ion-button color="primary" (click)="editData(expense.rowid)">
           <ion-icon name="paper"></ion-icon>
         </button>
-        <button ion-button color="danger" (click)="deleteData(expense.rowid)">
+        <button ion-button color="danger" (click)="deleteData(expense._id)">
           <ion-icon name="trash"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
+  <ion-buttons>
+    <button ion-button (click)="removeDatabase()">
+      <ion-icon name="trash"></ion-icon>
+    </button>
+  </ion-buttons>
 </ion-content>
 <ion-footer>
   <ion-toolbar>

@@ -7,7 +7,9 @@ import { AddDataPage} from '../add-data/add-data';
 import { EditDataPage} from '../edit-data/edit-data';
 import { DatabaseService } from "../../app/services/database2.service";
 
-import { RxDocument } from "rxdb";
+import { QueryChangeDetector, RxDocument, RxDatabase } from "rxdb";
+import * as RxDB from 'rxdb';
+
 
 @Component({
   selector: 'page-home',
@@ -42,6 +44,26 @@ export class HomePage {
   // }
 
   private async getData() {
+    // const useAdapter = 'cordova-sqlite';
+    // RxDB.plugin(require('pouchdb-adapter-cordova-sqlite'));
+    //
+    // let collections = [
+    //   {
+    //     name: 'expense',
+    //     schema: require('../../app/schemas/expense.schema.json')
+    //   }
+    // ];
+    //
+    // const db: RxDatabase = await RxDB.create({
+    //   name: 'newionic',
+    //   adapter: useAdapter,
+    //   password: 'myLongAndStupidPassword',
+    //   options: { location: 'default' },
+    //   ignoreDuplicate: true
+    // });
+    //
+    // await Promise.all(collections.map(colData => db.collection(<any>colData)));
+
     const db = await this.databaseService.get();
     const expenses$ = db['expense'].find().$;
     this.expenseSubscription = expenses$.subscribe(
@@ -104,18 +126,42 @@ export class HomePage {
     });
   }
 
-  deleteData(rowid) {
-    this.sqlite.create({
-      name: 'ionicdb.db',
-      location: 'default'
-    }).then((db: SQLiteObject) => {
-      db.executeSql('DELETE FROM expense WHERE rowid=?', [rowid])
-        .then(res => {
-          console.log(res);
-          this.getData();
-        })
-        .catch(e => console.log(e));
-    }).catch(e => console.log(e));
+  async deleteData(id) {
+    // const db = await this.databaseService.get();
+    // const expense$ = db['expense'].find({_id: id}).$;
+    // this.expenseSubscription = expense$.subscribe(
+    //   (expense) => {
+    //     if (expense[0]) expense[0].remove();
+    //     this.zone.run(() => { });
+    //   },
+    //   (err) => {
+    //     this.test = err;
+    //   });
+  }
+
+  // deleteData(rowid) {
+  //   this.sqlite.create({
+  //     name: 'ionicdb.db',
+  //     location: 'default'
+  //   }).then((db: SQLiteObject) => {
+  //     db.executeSql('DELETE FROM expense WHERE rowid=?', [rowid])
+  //       .then(res => {
+  //         console.log(res);
+  //         this.getData();
+  //       })
+  //       .catch(e => console.log(e));
+  //   }).catch(e => console.log(e));
+  // }
+
+  async removeDatabase() {
+    // const db = await this.databaseService.get();
+    // await db.remove();
+    RxDB.removeDatabase('newionic', 'cordova-sqlite')
+      .then(() => { this.expenses = [] })
+      .catch((err) => {
+        console.log(err);
+      });
+    this.zone.run(() => { });
   }
 
 }
